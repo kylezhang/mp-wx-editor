@@ -10,7 +10,6 @@ import useLocalStorage from 'react-use/lib/useLocalStorage'
 import { useDebouncedState } from '../hooks/useDebouncedState'
 import { Preview } from './Preview'
 import { ErrorOverlay } from './ErrorOverlay'
-import { useRouter } from 'next/navigation'
 import { Header } from './Header'
 import { Button } from '@/components/ui/button'
 import { CopyBtn } from './Copy'
@@ -19,13 +18,7 @@ import { TabBar } from './TabBar'
 import { themes } from '../css/markdown-body'
 import { compileMdx, getFrontMatter } from '../hooks/compileMdx'
 import { baseCss, codeThemes } from '../css/mdx'
-import {
-  PenSquare,
-  Columns,
-  MonitorSmartphone,
-  Square,
-  GitForkIcon,
-} from 'lucide-react'
+import { PenSquare, Columns, MonitorSmartphone, Square } from 'lucide-react'
 
 import clsx from 'clsx'
 import { useGlobalValue } from '@/hooks/useGlobalValue'
@@ -46,7 +39,6 @@ export default function Pen({
   const [globalValue] = useGlobalValue()
   const currentUserId = globalValue.user?._id
   const author_id = initialContent.author_id
-  const router = useRouter()
   const htmlRef = useRef()
   const previewRef = useRef()
   const [size, setSize] = useState({ percentage: 0.5, layout: initialLayout })
@@ -139,23 +131,14 @@ export default function Pen({
     })
   }
 
-  async function handleFork() {
-    const frontMatter = getFrontMatter(initialContent.html)
-    const title = frontMatter.title || 'Untitled'
-    const data = await postData({
-      url: `/api/posts`,
-      data: {
-        title,
-        ...initialContent,
-      },
-    })
-    router.push(`/post?id=${data.data.id}`)
-  }
-
   async function updatePost(content) {
     // demo 也保存到本地
     if (id === 'demo') {
-      localStorage.setItem('content', JSON.stringify(content))
+      // 合并元信息后再存，避免只写入 html/css/config 而丢掉 _id/title/author_id
+      localStorage.setItem(
+        'content',
+        JSON.stringify({ ...initialContent, ...content })
+      )
       setDirty(false)
       return
     }
@@ -395,16 +378,6 @@ export default function Pen({
         }
       >
         <div className="flex space-x-2">
-          {author_id !== currentUserId && (
-            <Button
-              className="hidden sm:inline-flex"
-              size="sm"
-              onClick={handleFork}
-            >
-              <GitForkIcon className="w-4 h-4 mr-1" />
-              Fork
-            </Button>
-          )}
           <CopyBtn
             htmlRef={htmlRef}
             baseCss={

@@ -1,10 +1,6 @@
 import { Logo } from './Logo'
-import Link from 'next/link'
 
 import { ThemeToggle } from '@/components/theme-toggle'
-import { LayoutTemplate } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { UserInfo } from '@/components/user-account-nav'
 import { cn } from '@/lib/utils'
 
 interface Props {
@@ -28,13 +24,7 @@ export function Header({ children, rightBtn }: Props) {
         {rightBtn && (
           <div className="block mx-2 lg:mx-2 w-px h-6 bg-gray-200 dark:bg-gray-700" />
         )}
-        <Link href="/template">
-          <Button size="icon" variant="secondary">
-            <LayoutTemplate className="w-5 h-5" />
-          </Button>
-        </Link>
         <ThemeToggle variant="secondary" />
-        <UserInfo />
       </div>
     </header>
   )

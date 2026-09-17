@@ -9,7 +9,7 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "favicons/apple-touch-icon-192.png",
+      "src": "favicons/apple-touch-icon.png",
       "type": "image/png",
       "sizes": "192x192"
     }
