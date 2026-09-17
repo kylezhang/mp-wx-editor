@@ -1,6 +1,7 @@
 {
-  "name": "editor.runjs.cool",
+  "name": "wechat-mdx-editor",
   "private": true,
+  "license": "GPL-3.0",
   "scripts": {
     "postinstall": "patch-package",
     "dev": "next dev",
