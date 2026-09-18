@@ -2,10 +2,6 @@
 
 纯本地微信公众号 MDX 排版编辑器 — 打开即用，零后端、零广告、零统计。用 MDX 写文章，实时预览排版效果，编辑完成后一键复制富文本粘贴进公众号后台，格式不丢。
 
-## 在线使用
-
-**<https://mp.op.oafdev.cn/>** — 无需登录，打开即是编辑器。
-
 ## 功能特性
 
 | 能力 | 说明 |
@@ -41,22 +37,14 @@ echo 'NEXT_PUBLIC_SITE_API_URL=' > .env.local
 npx next build   # 静态导出，产物在 out/
 ```
 
-### Caddy 部署示例
+### 部署
 
-```caddyfile
-mp.example.com {
-    encode gzip
-    root * /path/to/mp-wx-editor/out
+构建产物是纯静态文件，位于 `out/` 目录，任何能托管静态文件的服务器（Nginx、Caddy、Vercel、Netlify、对象存储等）均可部署，无需常驻 Node 进程。
 
-    @nextstatic path /_next/static/*
-    header @nextstatic Cache-Control "public, max-age=31536000, immutable"
+两点通用要求：
 
-    try_files {path} {path}.html {path}/index.html
-    file_server
-}
-```
-
-任何能托管静态文件的服务器（Nginx、Vercel、Netlify、对象存储等）均可部署，无需常驻 Node 进程。
+- 需将无扩展名的请求路径回退到对应的 `.html` 或 `目录/index.html`，否则直接访问 `/post` 这类路径会 404。
+- `/_next/static/*` 是带内容哈希的静态资源，可设置长期强缓存（`immutable`）。
 
 ## 使用须知
 
@@ -71,4 +59,4 @@ mp.example.com {
 
 ## 致谢
 
-本项目的编辑、预览、排版与复制能力来自 **马琪斌 [@maqi1520](https://github.com/maqi1520)** 的 **[mdx-notes](https://github.com/maqi1520/mdx-notes)**（<https://mdxnotes.com/>），在此基础上做了纯本地化改造（移除后端依赖与第三方广告 / 统计脚本）。感谢原作者。
+本项目在 **[@mdx-notes](https://github.com/maqi1520/mdx-notes)** 基础上做了纯本地化改造（移除后端依赖与第三方广告 / 统计脚本）。
